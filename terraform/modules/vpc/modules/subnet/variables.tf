@@ -11,5 +11,5 @@ variable "var_vpc_cidr" {
 
 variable "var_subnet_az_id" {
     description = "The availability zone ID for the subnet"
-    type        = string
+    type        = list(string)
 }
