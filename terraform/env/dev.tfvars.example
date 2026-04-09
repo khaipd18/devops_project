@@ -1,0 +1,2 @@
+# This file contains the example variable values for the development environment.
+# It is used by Terraform when you run `terraform plan -var-file=env/dev.tfvars`.
