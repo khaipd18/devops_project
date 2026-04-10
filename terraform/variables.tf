@@ -21,6 +21,11 @@ variable "repository_name" {
   type        = string
 }
 
+variable "force_delete" {
+  description = "Whether to force delete the repository even if it contains images"
+  type        = bool
+}
+
 variable "image_tag_mutability" {
   description = "The tag mutability setting for the repository"
   type        = string
@@ -34,4 +39,15 @@ variable "allow_push_principals" {
 variable "allow_pull_principals" {
   description = "List of principals allowed to pull images from the repository"
   type        = list(string)
+}
+
+#github-oidc-role configuration
+variable "github_oidc_role_name" {
+  description = "The name of the IAM role to create for GitHub OIDC authentication"
+  type        = string
+}
+
+variable "github_repo" {
+  description = "The GitHub repository in the format 'owner/repo' that will be allowed to assume the role"
+  type        = string
 }
