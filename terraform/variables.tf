@@ -5,7 +5,7 @@ variable "vpc_cidr" {
   description = "CIDR block for the VPC"
 }
 
-variable "subnet_az_ids" {
+variable "az_ids" {
   type        = list(string)
   description = "List of availability zone IDs for subnets"
 }
@@ -51,3 +51,71 @@ variable "github_repo" {
   description = "The GitHub repository in the format 'owner/repo' that will be allowed to assume the role"
   type        = string
 }
+
+#eks configuration
+# EKS cluster variables
+variable "eks_cluster_name" {
+  description = "The name of the EKS cluster."
+  type        = string
+}
+
+variable "eks_vpc_config_override" {
+  type = object({
+    endpoint_private_access = optional(bool)
+    endpoint_public_access  = optional(bool)
+    public_access_cidrs     = optional(list(string))
+  })
+}
+
+variable "eks_k8s_version" {
+  description = "The Kubernetes version to use for the EKS cluster."
+  type        = string
+}
+
+#eks node group variables
+variable "eks_node_group_instance_type" {
+  description = "The EC2 instance type to use for the EKS node group."
+  type        = list(string)
+  default     = ["t2.micro", "t2.medium", "t2.large"]
+}
+
+variable "eks_node_group_ami_type" {
+  description = "The AMI type to use for the EKS node group."
+  type        = string
+}
+
+variable "eks_node_group_capacity_type" {
+  description = "The capacity type to use for the EKS node group (e.g., ON_DEMAND or SPOT)."
+  type        = string
+}
+
+variable "eks_node_group_disk_size" {
+  description = "The disk size (in GiB) to use for the EKS node group."
+  type        = number
+}
+
+variable "eks_node_group_scaling_config" {
+  description = "The scaling configuration for the EKS node group."
+  type = object({
+    desired_size = number
+    max_size     = number
+    min_size     = number
+  })
+}
+
+#eks addon variables
+variable "eks_cni_version" {
+  description = "The version of the VPC CNI plugin to use for the EKS cluster."
+  type        = string
+}
+
+variable "eks_coredns_version" {
+  description = "The version of the CoreDNS addon to use for the EKS cluster."
+  type        = string
+}
+
+variable "eks_kube_proxy_version" {
+  description = "The version of the kube-proxy addon to use for the EKS cluster."
+  type        = string
+}
+

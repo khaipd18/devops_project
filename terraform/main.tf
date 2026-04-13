@@ -8,7 +8,7 @@ resource "aws_iam_openid_connect_provider" "github_core" {
 
 module "vpc" {
   source           = "./modules/vpc"
-  vpc_subnet_az_id = var.subnet_az_ids
+  vpc_subnet_az_id = var.az_ids
   vpc_cidr         = var.vpc_cidr
 }
 
@@ -28,4 +28,30 @@ module "github_oidc_role" {
   github_repo         = var.github_repo
   oidc_provider_arn   = aws_iam_openid_connect_provider.github_core.arn
   ecr_repository_arns = [module.ecr.repository_arn]
+}
+
+module "eks" {
+  source       = "./modules/eks"
+  cluster_name = var.eks_cluster_name
+
+  k8s_version = var.eks_k8s_version
+
+  vpc_config = local.eks_vpc_conf_finals
+
+  capacity_type = var.eks_node_group_capacity_type
+
+  instance_type = var.eks_node_group_instance_type
+
+  ami_type = var.eks_node_group_ami_type
+
+  disk_size = var.eks_node_group_disk_size
+
+  node_scaling_config = var.eks_node_group_scaling_config
+
+  cni_version = var.eks_cni_version
+
+  coredns_version = var.eks_coredns_version
+
+  kube_proxy_version = var.eks_kube_proxy_version
+
 }
