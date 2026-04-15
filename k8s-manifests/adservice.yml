@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adservice
+  labels:
+    app: adservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: adservice
+  template:
+    spec:
+      sercurityContext:
+        runAsUser: 3000
+        runAsGroup: 3000
+        fsGroup: 3000
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      containers:
+      - name: adservice
+        image: adservice:1.0
+        ports:
+          - containerPort: 9555
+        env:
+          - name: PORT
+            value: "9555"
+        resources:
+          limits:
+            cpu: 300m
+            memory: 300Mi
+          requests:
+            cpu: 200m
+            memory: 180Mi
+        readinessProbe:
+          rgpc:
+            port: 9555
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        livenessProbe:
+          rgpc:
+            port: 9555
+          initialDelaySeconds: 20
+          periodSeconds: 20
+---
