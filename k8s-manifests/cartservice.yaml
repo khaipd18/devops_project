@@ -96,6 +96,12 @@ spec:
             tcpSocket:
               port: 6379
             periodSeconds: 10
+          volumes:
+            - name: redis-data
+              emptyDir: {}
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
 ---
 apiVersion: v1
 kind: Service
