@@ -1,0 +1,112 @@
+apiversion: apps/v1
+kind: Deployment
+metadata:
+  name: cartservice
+  labels:
+    app: cartservice
+spec:
+  serviceaccountName: cartservice
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cartservice
+  template:
+    metadata:
+      labels:
+        app: cartservice
+    spec:
+      containers:
+        - name: cartservice
+          image: cartservice:1.0
+          ports:
+            - containerPort: 7070
+          env:
+            - name: REDIS_ADDR
+              value: "redis-cart:6379"
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+            requests:
+              cpu: 300m
+              memory: 128Mi
+          readinessProbe:
+            rgpc:
+              port: 7070
+            initialDelaySeconds: 15
+            periodSeconds: 15
+          livenessProbe:
+            rgpc:
+              port: 7070
+            initialDelaySeconds: 15
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+Metadata:
+  name: cartservice
+  labels:
+    app: cartservice
+spec:
+  type: ClusterIP
+  ports:
+    - port: 7070
+      targetPort: 7070
+  selector:
+    app: cartservice
+---
+apiVersion: v1
+kind: ServiceAccount
+Metadata:
+  name: cartservice
+---
+apiVersion: apps/v1
+kind: Deployment
+Metadata:
+  name: redis-cart
+  labels:
+    app: redis-cart
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis-cart
+  template:
+    metadata:
+      labels:
+        app: redis-cart
+    spec:
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+            requests:
+              cpu: 300m
+              memory: 128Mi
+          readinessProbe:
+            tcpSocket:
+              port: 6379
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+Metadata:
+  name: redis-cart
+  labels:
+    app: redis-cart
+spec:
+  selector:
+    app: redis-cart
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: 6379
