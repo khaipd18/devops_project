@@ -23,13 +23,6 @@ spec:
           env:
             - name: PORT
               value: "3550"
-          # Set environment variables for service addresses
-            - name: "COLLECTOR_SERVICE_ADDR"
-          # Set environment variables for application configuration
-            - name: "ENABLE_TRACING"
-            - name: "DISABLE_PROFILER"
-              value: "1"
-            - name: "EXTRA_LATENCY"
           resources:
             limits:
               cpu: 200m
