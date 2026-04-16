@@ -26,7 +26,7 @@ spec:
             - name: ENABLE_TRACING
               value: "1"
             - name: DISABLE_PROFILER
-              value: ""
+              value: "1"
           resources:
             limits:
               cpu: 200m
