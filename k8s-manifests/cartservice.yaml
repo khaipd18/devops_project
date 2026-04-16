@@ -43,7 +43,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-Metadata:
+metadata:
   name: cartservice
   labels:
     app: cartservice
@@ -57,12 +57,12 @@ spec:
 ---
 apiVersion: v1
 kind: ServiceAccount
-Metadata:
+metadata:
   name: cartservice
 ---
 apiVersion: apps/v1
 kind: Deployment
-Metadata:
+metadata:
   name: redis-cart
   labels:
     app: redis-cart
@@ -99,7 +99,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-Metadata:
+metadata:
   name: redis-cart
   labels:
     app: redis-cart
