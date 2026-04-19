@@ -17,7 +17,7 @@ spec:
       serviceAccountName: checkoutservice
       containers:
         - name: checkoutservice
-          image: checkoutservice:1.0
+          image: checkoutservice:local
           ports:
             - containerPort: 5050
           env:
@@ -43,15 +43,15 @@ spec:
               cpu: 100m
               memory: 64Mi
           readinessProbe:
-            rgpc:
+            grpc:
               port: 5050
-              initialDelaySeconds: 20
-              periodSeconds: 10
+            initialDelaySeconds: 20
+            periodSeconds: 10
           livenessProbe:
-            rgpc:
+            grpc:
               port: 5050
-              initialDelaySeconds: 20
-              periodSeconds: 10
+            initialDelaySeconds: 20
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

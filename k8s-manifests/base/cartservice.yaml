@@ -1,11 +1,10 @@
-apiversion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cartservice
   labels:
     app: cartservice
 spec:
-  serviceaccountName: cartservice
   replicas: 1
   selector:
     matchLabels:
@@ -15,9 +14,11 @@ spec:
       labels:
         app: cartservice
     spec:
+      serviceAccountName: cartservice # [ĐÃ SỬA] Viết hoa chữ A và đặt đúng vị trí
       containers:
         - name: cartservice
-          image: cartservice:1.0
+          image: cartservice:local
+          imagePullPolicy: Never      # [ĐÃ THÊM] Bắt buộc để chạy image local
           ports:
             - containerPort: 7070
           env:
@@ -25,18 +26,18 @@ spec:
               value: "redis-cart:6379"
           resources:
             limits:
-              cpu: 200m
-              memory: 64Mi
-            requests:
               cpu: 300m
               memory: 128Mi
+            requests:
+              cpu: 200m
+              memory: 64Mi
           readinessProbe:
-            rgpc:
+            grpc:
               port: 7070
             initialDelaySeconds: 15
             periodSeconds: 15
           livenessProbe:
-            rgpc:
+            grpc:
               port: 7070
             initialDelaySeconds: 15
             periodSeconds: 15
@@ -76,6 +77,9 @@ spec:
       labels:
         app: redis-cart
     spec:
+      volumes:
+        - name: redis-data
+          emptyDir: {}
       containers:
         - name: redis
           image: redis
@@ -84,10 +88,10 @@ spec:
           resources:
             limits:
               cpu: 200m
-              memory: 64Mi
+              memory: 128Mi  
             requests:
-              cpu: 300m
-              memory: 128Mi
+              cpu: 100m       
+              memory: 64Mi    
           readinessProbe:
             tcpSocket:
               port: 6379
@@ -96,9 +100,6 @@ spec:
             tcpSocket:
               port: 6379
             periodSeconds: 10
-          volumes:
-            - name: redis-data
-              emptyDir: {}
           volumeMounts:
             - name: redis-data
               mountPath: /data
