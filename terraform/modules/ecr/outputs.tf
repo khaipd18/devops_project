@@ -1,19 +1,19 @@
-output "repository_url" {
-  description = "The URL of the ECR repository"
-  value       = aws_ecr_repository.ecr_repository.repository_url
+output "repository_urls" {
+  description = "The URLs of the ECR repositories"
+  value       = [for repo in aws_ecr_repository.ecr_repository : repo.repository_url]
 }
 
-output "repository_arn" {
-  description = "The ARN of the ECR repository"
-  value       = aws_ecr_repository.ecr_repository.arn
+output "repository_arns" {
+  description = "The ARNs of the ECR repositories"
+  value       = [for repo in aws_ecr_repository.ecr_repository : repo.arn]
 }
 
-output "repository_name" {
-  description = "The name of the ECR repository"
-  value       = aws_ecr_repository.ecr_repository.name
+output "repository_names" {
+  description = "The names of the ECR repositories"
+  value       = [for repo in aws_ecr_repository.ecr_repository : repo.name]
 }
 
-output "registry_id" {
-  description = "The registry ID associated with the repository"
-  value       = aws_ecr_repository.ecr_repository.registry_id
+output "registry_ids" {
+  description = "The registry IDs associated with the repositories"
+  value       = [for repo in aws_ecr_repository.ecr_repository : repo.registry_id]
 }

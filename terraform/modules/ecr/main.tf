@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "ecr_repository" {
-  name                 = var.repository_name
+  for_each = var.repository_names
+  name                 = each.value
   image_tag_mutability = var.image_tag_mutability
   force_delete         = var.force_delete
   image_scanning_configuration {
@@ -8,19 +9,22 @@ resource "aws_ecr_repository" "ecr_repository" {
 }
 
 resource "aws_ecr_repository_policy" "this" {
-  count      = (length(var.allow_push_principals) + length(var.allow_pull_principals)) > 0 ? 1 : 0
-  repository = aws_ecr_repository.ecr_repository.name
+  for_each = (length(var.allow_push_principals) + length(var.allow_pull_principals)) > 0 ? aws_ecr_repository.ecr_repository : {}
+  repository = each.value.name
   policy     = data.aws_iam_policy_document.repository_policy.json
 }
 
-resource "aws_ecr_lifecycle_policy" "untagged_images_policy" {
-  repository = aws_ecr_repository.ecr_repository.name
-  policy     = <<EOF
+resource "aws_ecr_lifecycle_policy" "this" {
+  for_each   = aws_ecr_repository.ecr_repository 
+  
+  repository = each.value.name
+
+  policy = <<EOF
 {
   "rules": [
     {
       "rulePriority": 1,
-      "description": "Expire images older than 14 days",
+      "description": "Expire untagged images older than 14 days",
       "selection": {
         "tagStatus": "untagged",
         "countType": "sinceImagePushed",
@@ -30,19 +34,9 @@ resource "aws_ecr_lifecycle_policy" "untagged_images_policy" {
       "action": {
         "type": "expire"
       }
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_ecr_lifecycle_policy" "archived_images_policy" {
-  repository = aws_ecr_repository.ecr_repository.name
-  policy     = <<EOF
-{
-  "rules": [
+    },
     {
-      "rulePriority": 1,
+      "rulePriority": 2,
       "description": "Archive images not pulled in 90 days",
       "selection": {
         "tagStatus": "any",
@@ -56,7 +50,7 @@ resource "aws_ecr_lifecycle_policy" "archived_images_policy" {
       }
     },
     {
-      "rulePriority": 2,
+      "rulePriority": 3,
       "description": "Delete images archived for more than 365 days",
       "selection": {
         "tagStatus": "any",

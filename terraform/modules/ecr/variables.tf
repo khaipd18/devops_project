@@ -12,9 +12,9 @@ variable "force_delete" {
   description = "Whether to force delete the repository even if it contains images"
   type        = bool
 }
-variable "repository_name" {
+variable "repository_names" {
   description = "The name of the ECR repository"
-  type        = string
+  type        = set(string)
 }
 
 variable "allow_push_principals" {
