@@ -17,7 +17,7 @@ module "ecr" {
   scan_on_push          = var.scan_on_push
   force_delete          = var.force_delete
   image_tag_mutability  = var.image_tag_mutability
-  repository_name       = var.repository_name
+  repository_names       = var.repository_names
   allow_push_principals = var.allow_push_principals
   allow_pull_principals = var.allow_pull_principals
 }
@@ -27,7 +27,7 @@ module "github_oidc_role" {
   role_name           = var.github_oidc_role_name
   github_repo         = var.github_repo
   oidc_provider_arn   = aws_iam_openid_connect_provider.github_core.arn
-  ecr_repository_arns = [module.ecr.repository_arn]
+  ecr_repository_arns = module.ecr.repository_arns
 }
 
 module "eks" {
