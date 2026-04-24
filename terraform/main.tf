@@ -17,7 +17,7 @@ module "ecr" {
   scan_on_push          = var.scan_on_push
   force_delete          = var.force_delete
   image_tag_mutability  = var.image_tag_mutability
-  repository_names       = var.repository_names
+  repository_names      = var.repository_names
   allow_push_principals = var.allow_push_principals
   allow_pull_principals = var.allow_pull_principals
 }
@@ -35,6 +35,8 @@ module "eks" {
   cluster_name = var.eks_cluster_name
 
   k8s_version = var.eks_k8s_version
+
+  vpc_id = module.vpc.output_vpc_id
 
   vpc_config = local.eks_vpc_conf_finals
 
@@ -54,4 +56,38 @@ module "eks" {
 
   kube_proxy_version = var.eks_kube_proxy_version
 
+  depends_on = [ module.vpc ]
 }
+
+module "vpc_endpoints" {
+  source              = "./modules/vpc-endpoints"
+  region              = var.region
+  vpc_id              = module.vpc.output_vpc_id
+  vpc_cidr = var.vpc_cidr
+  private_subnet_list = module.vpc.private_subnet_ids
+  route_table_list    = ["${module.vpc.private_subnet_route_table_id}"]
+
+  depends_on = [ module.vpc ]
+}
+
+# Allow EKS nodes to access ECR VPCE
+#resource "aws_vpc_security_group_ingress_rule" "endpoint_allow_eks_nodes" {
+  #security_group_id = module.vpc_endpoints.ecr_endpoint_sg_id
+
+  #description                  = "Allow HTTPS inbound from EKS Worker Nodes"
+  #from_port                    = 443
+  #to_port                      = 443
+  #ip_protocol                  = "tcp"
+  #referenced_security_group_id = module.eks.node_group_sg_id
+#}
+
+# Allow EKS nodes to pull images from ECR VPCE
+#resource "aws_vpc_security_group_egress_rule" "eks_nodes_allow_endpoint" {
+ # security_group_id = module.eks.node_group_sg_id
+
+  #description                  = "Allow EKS Nodes to pull images from ECR VPCE"
+  #from_port                    = 443
+  #to_port                      = 443
+  #ip_protocol                  = "tcp"
+  #referenced_security_group_id = module.vpc_endpoints.ecr_endpoint_sg_id
+#}

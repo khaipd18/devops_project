@@ -12,5 +12,5 @@ locals {
   eks_vpc_conf_finals = merge(
     local.eks_vpc_configs,
     var.eks_vpc_config_override
-)
+  )
 }

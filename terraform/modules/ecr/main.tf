@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecr_repository" {
-  for_each = var.repository_names
+  for_each             = var.repository_names
   name                 = each.value
   image_tag_mutability = var.image_tag_mutability
   force_delete         = var.force_delete
@@ -9,14 +9,14 @@ resource "aws_ecr_repository" "ecr_repository" {
 }
 
 resource "aws_ecr_repository_policy" "this" {
-  for_each = (length(var.allow_push_principals) + length(var.allow_pull_principals)) > 0 ? aws_ecr_repository.ecr_repository : {}
+  for_each   = (length(var.allow_push_principals) + length(var.allow_pull_principals)) > 0 ? aws_ecr_repository.ecr_repository : {}
   repository = each.value.name
   policy     = data.aws_iam_policy_document.repository_policy.json
 }
 
 resource "aws_ecr_lifecycle_policy" "this" {
-  for_each   = aws_ecr_repository.ecr_repository 
-  
+  for_each = aws_ecr_repository.ecr_repository
+
   repository = each.value.name
 
   policy = <<EOF

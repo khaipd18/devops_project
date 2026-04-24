@@ -17,3 +17,13 @@ output "public_subnet_ids" {
   value       = module.subnet.output_public_subnet_ids
   description = "Public Subnet IDs"
 }
+
+output "private_subnet_route_table_id" {
+  value       = module.route-table.output_private_route_table_id
+  description = "Route table ID for private subnets"
+}
+
+output "public_subnet_route_table_id" {
+  value       = module.route-table.output_public_route_table_id
+  description = "Route table ID for public subnets"
+}

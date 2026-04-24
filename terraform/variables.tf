@@ -1,42 +1,45 @@
 # Variables for Terraform configuration
-
+variable "region" {
+  description = "The AWS region to deploy resources in"
+  default     = "ap-southeast-1"
+}
 #vpc configuration
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string
-  default = "10.18.0.0/16"
+  default     = "10.18.0.0/16"
 }
 
 variable "az_ids" {
   type        = list(string)
   description = "List of availability zone IDs for subnets"
-  default = [ "apse1-az1", "apse1-az2" ]
+  default     = ["apse1-az1", "apse1-az2"]
 }
 
 #ecr configuration
 variable "scan_on_push" {
   description = "Whether to enable image scanning on push"
   type        = bool
-  default = false
+  default     = false
 }
 
 variable "repository_names" {
   description = "List of ECR repository names"
   type        = set(string)
-  default = ["shippingservice", "recommendationservice", "productcatalogservice", 
+  default = ["shippingservice", "recommendationservice", "productcatalogservice",
   "paymentservice", "frontend", "emailservice", "currencyservice", "checkoutservice", "cartservice", "adservice"]
 }
 
 variable "force_delete" {
   description = "Whether to force delete the repository even if it contains images"
   type        = bool
-  default = true
+  default     = true
 }
 
 variable "image_tag_mutability" {
   description = "The tag mutability setting for the repository"
   type        = string
-  default = "MUTABLE"
+  default     = "MUTABLE"
 }
 
 variable "allow_push_principals" {
@@ -55,13 +58,13 @@ variable "allow_pull_principals" {
 variable "github_oidc_role_name" {
   description = "The name of the IAM role to create for GitHub OIDC authentication"
   type        = string
-  default = "github-actions-oidc-role"
+  default     = "github-actions-oidc-role"
 }
 
 variable "github_repo" {
   description = "The GitHub repository in the format 'owner/repo' that will be allowed to assume the role"
   type        = string
-  default = "khaipd18/devops_project"
+  default     = "khaipd18/devops_project"
 }
 
 #eks configuration
@@ -69,7 +72,7 @@ variable "github_repo" {
 variable "eks_cluster_name" {
   description = "The name of the EKS cluster."
   type        = string
-  default = "khaipd18-eks-cluster"
+  default     = "khaipd18-eks-cluster"
 }
 
 variable "eks_vpc_config_override" {
@@ -78,19 +81,25 @@ variable "eks_vpc_config_override" {
     endpoint_public_access  = optional(bool)
     public_access_cidrs     = optional(list(string))
   })
+  description = "Override for the default VPC configuration of the EKS cluster. Only include fields that need to be overridden."
+  default = {
+    endpoint_private_access = true
+    endpoint_public_access  = true
+    public_access_cidrs     = ["0.0.0.0/0"]
+  }
 }
 
 variable "eks_k8s_version" {
   description = "The Kubernetes version to use for the EKS cluster."
   type        = string
-  default = "1.35"
+  default     = "1.35"
 }
 
 #eks node group variables
 variable "eks_node_group_instance_type" {
   description = "The EC2 instance type to use for the EKS node group."
   type        = list(string)
-  default     = ["t2.micro", "t2.medium", "t2.large"]
+  default     = ["t3.medium"]
 }
 
 variable "eks_node_group_ami_type" {
