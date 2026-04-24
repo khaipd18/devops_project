@@ -1,0 +1,49 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dev-microservices
+
+namePrefix: aws-dev-
+commonLabels:
+  env: aws-dev
+  project: microservices-demo
+
+resources:
+  - ../../base
+
+images:
+  - name: adservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/adservice
+  - name: cartservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/cartservice
+  - name: checkoutservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/checkoutservice
+  - name: currencyservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/currencyservice
+  - name: emailservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/emailservice
+  - name: frontend 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/frontend
+  - name: paymentservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/paymentservice
+  - name: productcatalogservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/productcatalogservice
+  - name: recommendationservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/recommendationservice
+  - name: shippingservice 
+    newName: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/shippingservice
+patches:
+  - path: checkoutservice-patch.yaml
+  - path: frontend-patch.yaml
+  - path: recommendationservice-patch.yaml
+  - path: cartservice-patch.yaml
+  - target:
+      kind: Service
+      name: frontend-external
+    patch: |-
+      - op: replace
+        path: /spec/ports
+        value:
+          - name: http
+            port: 80
+            targetPort: 8080
