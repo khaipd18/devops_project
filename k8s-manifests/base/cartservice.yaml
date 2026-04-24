@@ -14,11 +14,11 @@ spec:
       labels:
         app: cartservice
     spec:
-      serviceAccountName: cartservice # [ĐÃ SỬA] Viết hoa chữ A và đặt đúng vị trí
+      serviceAccountName: cartservice 
       containers:
         - name: cartservice
           image: cartservice:local
-          imagePullPolicy: Never      # [ĐÃ THÊM] Bắt buộc để chạy image local
+          imagePullPolicy: Always 
           ports:
             - containerPort: 7070
           env:

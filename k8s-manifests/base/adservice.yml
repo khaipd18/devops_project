@@ -5,7 +5,7 @@ metadata:
   labels:
     app: adservice
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: adservice
@@ -22,7 +22,7 @@ spec:
       containers:
       - name: adservice
         image: adservice:local
-        imagePullPolicy: Never 
+        imagePullPolicy: Always 
         securityContext:       
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

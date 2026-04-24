@@ -18,6 +18,7 @@ spec:
       containers:
         - name: recommendationservice
           image: recommendationservice:local
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

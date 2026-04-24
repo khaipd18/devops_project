@@ -18,6 +18,7 @@ spec:
       containers:
         - name: paymentservice
           image: paymentservice:local
+          imagePullPolicy: Always
           ports:
             - containerPort: 50051
           env:
