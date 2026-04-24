@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: frontend
+          env:
+            - name: AD_SERVICE_ADDR
+              value: "local-adservice:9555"
+            - name: PRODUCT_CATALOG_SERVICE_ADDR
+              value: "local-productcatalogservice:3550"
+            - name: CURRENCY_SERVICE_ADDR
+              value: "local-currencyservice:7000"
+            - name: CART_SERVICE_ADDR
+              value: "local-cartservice:7070"
+            - name: RECOMMENDATION_SERVICE_ADDR
+              value: "local-recommendationservice:8080"
+            - name: CHECKOUT_SERVICE_ADDR
+              value: "local-checkoutservice:5050"
+            - name: SHIPPING_SERVICE_ADDR
+              value: "local-shippingservice:50051"
+            - name: SHOPPING_ASSISTANT_SERVICE_ADDR
+              value: "local-shoppingassistantservice:80"
+
