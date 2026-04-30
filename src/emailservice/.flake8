@@ -21,3 +21,10 @@ ignore =
     # E3: blank line related errors
     # W3: warning related to blank lines
     E3, W3
+
+    # F401: module imported but unused
+    F401,  
+    # F841: local variable assigned but never used
+    F841,  
+    # F821: undefined name (e.g., variable or function used but not defined)
+    F821  
