@@ -1,0 +1,10 @@
+root = true
+
+[*.cs]
+# Indent with 4 spaces for C# files
+indent_style = space
+indent_size = 4
+
+# Turn off specific code style analyzers that might be too noisy for now
+dotnet_diagnostic.IDE0055.severity = none
+dotnet_diagnostic.IDE0005.severity = none
