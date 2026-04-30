@@ -130,8 +130,7 @@ func run(port string) string {
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(
 			propagation.TraceContext{}, propagation.Baggage{}))
-	var srv *grpc.Server
-	srv = grpc.NewServer(
+	srv := grpc.NewServer(
 		grpc.StatsHandler(otelgrpc.NewServerHandler()))
 
 	svc := &productCatalog{}
@@ -148,9 +147,9 @@ func run(port string) string {
 	return listener.Addr().String()
 }
 
-func initStats() {
+//func initStats() {
 	// TODO(drewbr) Implement OpenTelemetry stats
-}
+//}
 
 func initTracing() error {
 	var (
