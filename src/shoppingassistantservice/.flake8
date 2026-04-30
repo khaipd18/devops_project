@@ -1,0 +1,23 @@
+[flake8]
+# Exclude common directories and generated files that should not be checked
+exclude = 
+    .git,
+    __pycache__,
+    venv,
+    env,
+    *_pb2.py,
+    *_pb2_grpc.py
+
+# ignore specific error codes
+ignore = 
+    # E501: line too long (82 > 79 characters)
+    E501, 
+    # E2: whitespace related errors
+    # W2: warning related to whitespace issues
+    E2, W2,
+    # E1: indentation related errors
+    # W1: warning related to indentation and other stylistic issues
+    E1, W1,
+    # E3: blank line related errors
+    # W3: warning related to blank lines
+    E3, W3
