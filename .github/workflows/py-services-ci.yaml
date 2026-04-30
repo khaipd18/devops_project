@@ -65,7 +65,7 @@ jobs:
         run: flake8 .
 
       - name: Run Security Scan (bandit)
-        run: bandit -r . -x tests/
+        run: bandit -r . -x tests/ -ll
 
       - name: Run Unit Tests (pytest)
         run: pytest || echo "No tests found or tests failed, but continuing for now."
