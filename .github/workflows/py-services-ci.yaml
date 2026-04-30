@@ -6,7 +6,6 @@ on:
     paths:
       - 'src/emailservice/**'
       - 'src/recommendationservice/**'
-      - 'src/shoppingassistantservice/**'
   workflow_dispatch: 
 
 jobs:
@@ -25,7 +24,6 @@ jobs:
           filters: |
             emailservice: 'src/emailservice/**'
             recommendationservice: 'src/recommendationservice/**'
-            shoppingassistantservice: 'src/shoppingassistantservice/**'
 
   build-and-push:
     needs: detect-changes
@@ -39,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: ${{ fromJSON( github.event_name == 'workflow_dispatch' && '["emailservice", "recommendationservice", "shoppingassistantservice"]' || needs.detect-changes.outputs.matrix ) }}
+        service: ${{ fromJSON( github.event_name == 'workflow_dispatch' && '["emailservice", "recommendationservice"]' || needs.detect-changes.outputs.matrix ) }}
     
     defaults:
       run:
