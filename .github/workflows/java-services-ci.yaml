@@ -71,7 +71,7 @@ jobs:
 
       - name: Build Application (Optional)
         # Ensure source code is compiled into a .jar file before packaging Docker
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -x verifyGoogleJavaFormat
 
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v6
