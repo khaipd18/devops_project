@@ -88,5 +88,9 @@ jobs:
           ECR_REPOSITORY: ${{ matrix.service }} 
           IMAGE_TAG: ${{ github.event.inputs.custom_tag || github.sha }}
         run: |
+          if [ -d "src" ]; then
+            cd src
+          fi
+        
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
