@@ -54,13 +54,6 @@ variable "allow_pull_principals" {
   default     = []
 }
 
-#github-oidc-role configuration
-variable "github_oidc_role_name" {
-  description = "The name of the IAM role to create for GitHub OIDC authentication"
-  type        = string
-  default     = "github-actions-oidc-role"
-}
-
 variable "github_repo" {
   description = "The GitHub repository in the format 'owner/repo' that will be allowed to assume the role"
   type        = string

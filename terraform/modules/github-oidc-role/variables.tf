@@ -17,3 +17,9 @@ variable "ecr_repository_arns" {
   description = "A list of ECR repository ARNs that the role will have permissions to access"
   type        = list(string)
 }
+
+variable "custom_policy_arns" {
+  description = "A list of additional IAM policy ARNs to attach to the role for extra permissions beyond ECR access"
+  type        = list(string)
+  default     = []
+}

@@ -17,14 +17,14 @@ resource "aws_eks_node_group" "eks_node_group" {
   }
 
   #launch_template {
-    #id      = aws_launch_template.eks_nodes_lt.id
-    #version = aws_launch_template.eks_nodes_lt.latest_version
+  #id      = aws_launch_template.eks_nodes_lt.id
+  #version = aws_launch_template.eks_nodes_lt.latest_version
   #}
 
   depends_on = [
     aws_iam_role_policy_attachment.node_group_AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.node_group_AmazonEC2ContainerRegistryReadOnly,
-    aws_iam_role_policy_attachment.node_group_AmazonSSMManagedInstanceCore]
+  aws_iam_role_policy_attachment.node_group_AmazonSSMManagedInstanceCore]
 
   #aws_launch_template.eks_nodes_lt]
 }
@@ -41,10 +41,10 @@ resource "aws_security_group" "eks_nodes_sg" {
   }
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    self        = true
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true
   }
 }
 resource "aws_launch_template" "eks_nodes_lt" {
