@@ -7,6 +7,11 @@ on:
       - 'src/emailservice/**'
       - 'src/recommendationservice/**'
   workflow_dispatch: 
+    inputs:
+      custom_tag:
+        description: 'Image tag to use for this build (optional, defaults to git sha)'
+        required: false
+        type: string
 
 jobs:
   detect-changes:
@@ -82,7 +87,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ matrix.service }} 
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: ${{ github.event.inputs.custom_tag || github.sha }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
