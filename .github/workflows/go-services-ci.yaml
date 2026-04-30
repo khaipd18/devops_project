@@ -22,10 +22,10 @@ jobs:
       matrix: ${{ steps.filter.outputs.changes }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Filter changed paths
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -79,7 +79,7 @@ jobs:
           go test -v ./...
 
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::797226340543:role/github-actions-oidc-role
           aws-region: ap-southeast-1
