@@ -1,0 +1,42 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "cartservice"
+
+image:
+  repository: cartservice
+  tag: "local"
+  pullPolicy: Never
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 7070
+  targetPort: 7070
+
+env:
+  REDIS_ADDR: "redis-cart:6379"
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 128Mi
+  requests:
+    cpu: 200m
+    memory: 64Mi
+    
+probes:
+  readiness:
+    grpc:
+      port: 7070
+    initialDelaySeconds: 15
+    periodSeconds: 15
+  liveness:
+    grpc:
+      port: 7070
+    initialDelaySeconds: 15
+    periodSeconds: 15

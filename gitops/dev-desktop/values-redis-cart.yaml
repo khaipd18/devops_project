@@ -1,0 +1,45 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+image:
+  repository: redis
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 6379
+  targetPort: 6379
+
+serviceAccount:
+  create: false 
+  name: ""
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+volumeMounts:
+  - name: redis-data
+    mountPath: /data
+
+volumes:
+  - name: redis-data
+    emptyDir: {}
+    
+probes:
+  readiness:
+    tcpSocket:
+      port: 6379
+    periodSeconds: 10
+  liveness:
+    tcpSocket:
+      port: 6379
+    periodSeconds: 10

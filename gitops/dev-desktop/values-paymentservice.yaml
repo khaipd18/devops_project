@@ -1,0 +1,44 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "paymentservice"
+
+image:
+  repository: paymentservice
+  tag: "local"
+  pullPolicy: Never
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 50051
+  targetPort: 50051
+  
+env:
+  PORT: "50051"
+  ENABLE_TRACING: "1"
+  DISABLE_PROFILER: "1"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+    
+probes:
+  readiness:
+    grpc:
+      port: 50051
+    initialDelaySeconds: 20
+    periodSeconds: 10
+  liveness:
+    grpc:
+      port: 50051
+    initialDelaySeconds: 20
+    periodSeconds: 10

@@ -1,0 +1,45 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "recommendationservice"
+
+image:
+  repository: recommendationservice
+  tag: "local"
+  pullPolicy: Never
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+env:
+  PORT: "8080"
+  ENABLE_TRACING: "1"
+  COLLECTOR_SERVICE_ADDR: "localhost:4317"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 250Mi
+    
+probes:
+  readiness:
+    grpc:
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 20
+  liveness:
+    grpc:
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 20
