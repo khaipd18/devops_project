@@ -1,0 +1,50 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "adservice"
+
+podSecurityContext:
+  runAsUser: 3000
+  runAsGroup: 3000
+  fsGroup: 3000
+
+image:
+  repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/adservice
+  tag: "local"
+  pullPolicy: Always
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 9555
+  targetPort: 9555
+env:
+  PORT: "9555"
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 300Mi
+  requests:
+    cpu: 200m
+    memory: 180Mi
+
+probes:
+  readiness:
+    grpc:
+      port: 9555
+    initialDelaySeconds: 20
+    periodSeconds: 20
+  liveness:
+    grpc:
+      port: 9555
+    initialDelaySeconds: 20
+    periodSeconds: 20

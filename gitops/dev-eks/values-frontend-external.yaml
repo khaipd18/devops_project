@@ -1,0 +1,14 @@
+deployment: 
+  enabled: false
+
+replicaCount: 0
+
+serviceAccount:
+  create: false
+
+service:
+  enabled: true
+  type: LoadBalancer
+  port: 80
+  targetPort: 8080
+  selectorOverride: "frontend"

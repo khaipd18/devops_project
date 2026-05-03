@@ -1,0 +1,55 @@
+deployment: 
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "frontend"
+
+image:
+  repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/frontend
+  tag: "local"
+  pullPolicy: Always
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+env:
+  PORT: "8080"
+  ENABLE_PROFILER: "0"
+  AD_SERVICE_ADDR: "adservice:9555"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+  CURRENCY_SERVICE_ADDR: "currencyservice:7000"
+  CART_SERVICE_ADDR: "cartservice:7070"
+  RECOMMENDATION_SERVICE_ADDR: "recommendationservice:8080"
+  CHECKOUT_SERVICE_ADDR: "checkoutservice:5050"
+  SHIPPING_SERVICE_ADDR: "shippingservice:50051"
+  SHOPPING_ASSISTANT_SERVICE_ADDR: "shoppingassistantservice:80"
+  ENV_PLATFORM: "aws"
+  GOMAXPROCS: "1"
+  GOMEMLITMIT: "230Mi"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+    
+probes:
+  readiness:
+    httpGet:
+      path: /_healthz
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 20
+  liveness:
+    httpGet:
+      path: /_healthz
+      port: 8080
+    initialDelaySeconds: 20
+    periodSeconds: 20

@@ -1,0 +1,43 @@
+deployment:
+  enabled: true
+
+replicaCount: 1
+
+serviceAccount:
+  create: true
+  name: "currencyservice"
+
+image:
+  repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/currencyservice
+  tag: "local"
+  pullPolicy: Always
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 7000
+  targetPort: 7000
+
+env:
+  PORT: "7000"
+  ENABLE_TRACING: "1"
+  DISABLE_PROFILER: "1"
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+    
+probes:
+  readiness:
+    grpc:
+      port: 7000
+    initialDelaySeconds: 20
+    periodSeconds: 15
+  liveness:
+    grpc:
+      port: 7000
+    initialDelaySeconds: 20
+    periodSeconds: 15
