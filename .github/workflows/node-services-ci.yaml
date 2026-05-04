@@ -37,7 +37,7 @@ jobs:
     
     permissions:
       id-token: write 
-      contents: read
+      contents: write
     
     strategy:
       fail-fast: false
@@ -51,6 +51,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -90,3 +92,34 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "NEW_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "FULL_REPO=$ECR_REGISTRY/$ECR_REPOSITORY" >> $GITHUB_ENV
+
+      - name: Update GitOps and Push Back
+        working-directory: . 
+        run: |
+          # Update image configs
+          yq -i '.image.repository = "${{ env.FULL_REPO }}"' gitops/dev-eks/values-${{ matrix.service }}.yaml
+          yq -i '.image.tag = "${{ env.NEW_TAG }}"' gitops/dev-eks/values-${{ matrix.service }}.yaml
+
+          # Configure git bot
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+          # Commit changes
+          git add gitops/dev-eks/values-${{ matrix.service }}.yaml
+          git commit -m "chore(gitops): update ${{ matrix.service }} to ${{ env.NEW_TAG }} [skip ci]"
+
+          # Retry loop for concurrent pushes
+          for i in {1..5}; do
+            git pull --rebase origin main
+            if git push origin main; then
+              echo "Successfully pushed ${{ matrix.service }} updates."
+              exit 0
+            fi
+            echo "Conflict detected (attempt $i/5). Retrying..."
+            sleep $((RANDOM % 5 + 1))
+          done
+          
+          echo "Failed to push after 5 attempts."
+          exit 1
