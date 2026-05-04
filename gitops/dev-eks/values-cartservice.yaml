@@ -1,26 +1,20 @@
-deployment: 
+deployment:
   enabled: true
-
 replicaCount: 1
-
 serviceAccount:
   create: true
   name: "cartservice"
-
 image:
   repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/cartservice
-  tag: "local"
+  tag: "b6416b0a40885c63f7047a872ccdd1272cf1bd4c"
   pullPolicy: Always
-
 service:
   enabled: true
   type: ClusterIP
   port: 7070
   targetPort: 7070
-
 env:
   REDIS_ADDR: "redis-cart:6379"
-
 resources:
   limits:
     cpu: 300m
@@ -28,7 +22,6 @@ resources:
   requests:
     cpu: 200m
     memory: 64Mi
-    
 probes:
   readiness:
     grpc:
