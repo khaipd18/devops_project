@@ -1,29 +1,23 @@
-deployment: 
+deployment:
   enabled: true
-
 replicaCount: 1
-
 serviceAccount:
   create: true
   name: "recommendationservice"
-
 image:
   repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/recommendationservice
-  tag: "local"
+  tag: "0377f458dd98b864c93c6fe9594e8814d8ff34b8"
   pullPolicy: Always
-
 service:
   enabled: true
   type: ClusterIP
   port: 8080
   targetPort: 8080
-
 env:
   PORT: "8080"
   ENABLE_TRACING: "1"
   COLLECTOR_SERVICE_ADDR: "localhost:4317"
   PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
-
 resources:
   limits:
     cpu: 200m
@@ -31,7 +25,6 @@ resources:
   requests:
     cpu: 100m
     memory: 250Mi
-    
 probes:
   readiness:
     grpc:
