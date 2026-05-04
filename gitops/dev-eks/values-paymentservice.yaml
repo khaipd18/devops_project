@@ -1,28 +1,22 @@
-deployment: 
+deployment:
   enabled: true
-
 replicaCount: 1
-
 serviceAccount:
   create: true
   name: "paymentservice"
-
 image:
   repository: 797226340543.dkr.ecr.ap-southeast-1.amazonaws.com/paymentservice
-  tag: "local"
+  tag: "b6416b0a40885c63f7047a872ccdd1272cf1bd4c"
   pullPolicy: Always
-
 service:
   enabled: true
   type: ClusterIP
   port: 50051
   targetPort: 50051
-  
 env:
   PORT: "50051"
   ENABLE_TRACING: "1"
   DISABLE_PROFILER: "1"
-
 resources:
   limits:
     cpu: 200m
@@ -30,7 +24,6 @@ resources:
   requests:
     cpu: 100m
     memory: 64Mi
-    
 probes:
   readiness:
     grpc:
