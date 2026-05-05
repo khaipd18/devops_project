@@ -33,7 +33,7 @@ spec:
           valueFiles:
             - '../gitops/dev-eks/values-{{name}}.yaml'
       destination:
-        server: 'khaipd18-project-cluster'
+        name: 'khaipd18-project-cluster'
         namespace: dev-eks
       syncPolicy:
         automated:
