@@ -30,6 +30,7 @@ spec:
         targetRevision: HEAD
         path: helm-charts
         helm:
+          releaseName: '{{name}}-dev'
           valueFiles:
             - '../gitops/dev-eks/values-{{name}}.yaml'
       destination:
