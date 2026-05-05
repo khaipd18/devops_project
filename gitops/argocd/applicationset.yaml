@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: microservices-dev-eks
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: adservice
+          - name: cartservice
+          - name: checkoutservice
+          - name: currencyservice
+          - name: emailservice
+          - name: frontend
+          - name: frontend-external
+          - name: paymentservice
+          - name: productcatalogservice
+          - name: recommendationservice
+          - name: redis-cart
+          - name: shippingservice
+  template:
+    metadata:
+      name: '{{name}}-dev'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/khaipd18/devops_project.git'
+        targetRevision: HEAD
+        path: helm-charts
+        helm:
+          valueFiles:
+            - '../gitops/dev-eks/values-{{name}}.yaml'
+      destination:
+        server: 'khaipd18-project-cluster'
+        namespace: dev-eks
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
