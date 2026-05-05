@@ -20,12 +20,12 @@ service:
 
 env:
   PORT: "5050"
-  SHIPPING_SERVICE_ADDR: "shippingservice:50051"
-  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
-  CART_SERVICE_ADDR: "cartservice:7070"
-  CURRENCY_SERVICE_ADDR: "currencyservice:7000"
-  EMAIL_SERVICE_ADDR: "emailservice:8080"
-  PAYMENT_SERVICE_ADDR: "paymentservice:50051"
+  SHIPPING_SERVICE_ADDR: "shippingservice-dev:50051"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice-dev:3550"
+  CART_SERVICE_ADDR: "cartservice-dev:7070"
+  CURRENCY_SERVICE_ADDR: "currencyservice-dev:7000"
+  EMAIL_SERVICE_ADDR: "emailservice-dev:8080"
+  PAYMENT_SERVICE_ADDR: "paymentservice-dev:50051"
 
 resources:
   limits:

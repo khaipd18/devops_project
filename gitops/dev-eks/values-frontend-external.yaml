@@ -11,4 +11,4 @@ service:
   type: LoadBalancer
   port: 80
   targetPort: 8080
-  selectorOverride: "frontend"
+  selectorOverride: "frontend-dev"

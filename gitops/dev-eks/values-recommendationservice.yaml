@@ -17,7 +17,7 @@ env:
   PORT: "8080"
   ENABLE_TRACING: "1"
   COLLECTOR_SERVICE_ADDR: "localhost:4317"
-  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice:3550"
+  PRODUCT_CATALOG_SERVICE_ADDR: "productcatalogservice-dev:3550"
 resources:
   limits:
     cpu: 200m
